@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "382846955612",
+    "firebase_url": "https://powerpong-21a1b.firebaseio.com",
+    "project_id": "powerpong-21a1b",
+    "storage_bucket": "powerpong-21a1b.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:382846955612:android:8f60c9f17a9cf2c4",
+        "android_client_info": {
+          "package_name": "com.example.powerpong"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "382846955612-m8omk6igpqrulap3e6kvpsph89saufb2.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.powerpong",
+            "certificate_hash": "22b14cb55c974452f090816c17b40610203ddb7a"
+          }
+        },
+        {
+          "client_id": "382846955612-luemlkbqgt9749b0f2dau163vj0qbbbv.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBRwFJU2o422XL1BJ9GYEubhDyUa34LMp0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "382846955612-luemlkbqgt9749b0f2dau163vj0qbbbv.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
