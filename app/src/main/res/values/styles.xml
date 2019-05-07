@@ -1,11 +1,41 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+    </style>
+
+    <style name="button" parent="@android:style/Widget.Button">
+        <item name="android:gravity">center_vertical|center_horizontal</item>
+        <item name="android:textColor">#EAEAEA</item>
+        <!--<item name="android:shadowColor">#FF000000</item>-->
+        <!--<item name="android:shadowDx">0</item>-->
+        <!--<item name="android:shadowDy">-1</item>-->
+        <!--<item name="android:shadowRadius">0.2</item>-->
+        <item name="android:paddingLeft">20dp</item>
+        <item name="android:paddingRight">20dp</item>
+        <item name="android:width">150dp</item>
+        <item name="android:background">@drawable/red_button</item>
+        <item name="android:textSize">21sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:fontFamily">@font/ac</item>
+        <item name="android:focusable">true</item>
+        <item name="android:clickable">true</item>
+        <!--<item name="android:radius">30dp</item>-->
+        <item name="android:layout_marginLeft">200dp</item>
+        <item name="android:layout_marginRight">200dp</item>
+
+    </style>
+
+    <style name="text">
+        <item name="android:gravity">center_vertical|center_horizontal</item>
+        <item name="android:textColor">#EAEAEA</item>
+        <item name="android:textSize">21sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:fontFamily">@font/ac</item>
     </style>
 
 </resources>
