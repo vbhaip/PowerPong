@@ -1,9 +1,12 @@
 package com.example.powerpong;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.view.Window;
+import android.widget.Button;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -13,6 +16,7 @@ public class HomeActivity extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
     private FirebaseUser mUser;
+    private Button mSinglePlayerButton;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -24,7 +28,16 @@ public class HomeActivity extends AppCompatActivity {
 
         mUser = mAuth.getCurrentUser();
 
-//        Log.d("dfasfal", mUser.getEmail());
+        mSinglePlayerButton = (Button)findViewById(R.id.single_player_button);
+
+        mSinglePlayerButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(HomeActivity.this, SinglePlayerActivity.class);
+                startActivity(i);
+            }
+        });
+//        Log.d("dfasfal", mUser);
 
     }
 }
