@@ -1,9 +1,12 @@
 package com.example.powerpong;
 
+import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
+import android.graphics.Typeface;
+import android.os.Handler;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -43,16 +46,18 @@ public class PongGame {
     private int mUserScore;
     private int mOppScore;
 
+    private boolean reset;
+
     private Paint paint;
 
 
-    public PongGame(int height, int width){
+    public PongGame(int height, int width, Context context){
 
         mScreenWidth = width;
         mScreenHeight = height;
 
-        Log.d("height", "" + mScreenHeight);
-        Log.d("width","" + mScreenWidth);
+//        Log.d("height", "" + mScreenHeight);
+//        Log.d("width","" + mScreenWidth);
 
         mUserPaddleY = (int)(mScreenHeight *.95);
         mOppPaddleY = (int)(mScreenHeight *.05);
@@ -69,8 +74,8 @@ public class PongGame {
 
         mControlRadius = 75;
 
-        mBallVX = 2;
-        mBallVY = 2;
+        mBallVX = 4;
+        mBallVY = 4;
 
         mBallRadius = 25;
 
@@ -82,9 +87,14 @@ public class PongGame {
         mUserScore = 0;
         mOppScore = 0;
 
+        reset = true;
+
         mFill = false;
 
         paint = new Paint();
+        paint.setTextAlign(Paint.Align.CENTER);
+        Typeface ac = Typeface.createFromAsset(context.getAssets(), "fonts/ac.ttf");
+        paint.setTypeface(ac);
     }
 
     public void drawBall(Canvas canvas){
@@ -123,11 +133,11 @@ public class PongGame {
             float y = ev.getY();
 //        float y = ev.getY();
             if (Math.pow(mRightControlX-x,2) + Math.pow(mScreenHeight/2 - y, 2)
-                    < Math.pow(mControlRadius + 5, 2)) {
+                    < Math.pow(mControlRadius + 5, 2) && mUserPaddleX <= mScreenWidth) {
                 mUserPaddleX += mPaddleVelocity;
                 mFill = true;
             } else if(Math.pow(mLeftControlX-x,2) + Math.pow(mScreenHeight/2 - y, 2)
-                    < Math.pow(mControlRadius + 5, 2)){
+                    < Math.pow(mControlRadius + 5, 2) && mUserPaddleX >= 0){
                 mUserPaddleX -= mPaddleVelocity;
                 mFill = true;
             }
@@ -139,11 +149,17 @@ public class PongGame {
 
     public void checkBounce(){
 
-        if(mBallY - mBallRadius == 0){
-            score(true);
+        if(mBallY - mBallRadius <= 0){
+            mUserScore++;
+            reset = true;
+            mBallX = mScreenWidth / 2;
+            mBallY = mScreenHeight / 2;
         }
-        if(mBallY + mBallRadius == mScreenHeight){
-            score(false);
+        else if(mBallY + mBallRadius >= mScreenHeight){
+            mOppScore++;
+            reset = true;
+            mBallX = mScreenWidth / 2;
+            mBallY = mScreenHeight / 2;
         }
 
         if(mBallY + mBallRadius >= mUserPaddleY - mPaddleHeight/2 &&
@@ -173,12 +189,31 @@ public class PongGame {
         mBallX += mBallVX;
         mBallY += mBallVY;
 
+        mOppPaddleX += mBallVX*3/4;
+
         checkBounce();
+//        }
+    }
+
+    public void displayScore(Canvas canvas){
+//        if(reset) {
+
+            paint.setColor(Color.parseColor("#EAEAEA"));
+            paint.setTextSize(90);
+
+            canvas.drawText(mUserScore + " - " + mOppScore, mScreenWidth / 2, mScreenHeight / 2, paint);
+//            try {
+//                Thread.sleep(5000);
+//            } catch (Exception e) {
+//                Log.d("thread can't sleep", e + "");
+//            }
+//            reset = false;
 //        }
     }
 
     public void draw(Canvas canvas){
         canvas.drawColor(Color.parseColor("#031927"));
+        displayScore(canvas);
         drawBall(canvas);
         drawPaddles(canvas);
         drawControls(canvas);

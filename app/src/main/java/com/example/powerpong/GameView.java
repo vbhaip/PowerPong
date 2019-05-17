@@ -28,7 +28,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
 
         DisplayMetrics displayMetrics = new DisplayMetrics();
         ((Activity)context).getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
-        pongGame = new PongGame(displayMetrics.heightPixels, displayMetrics.widthPixels);
+        pongGame = new PongGame(displayMetrics.heightPixels, displayMetrics.widthPixels, context);
     }
 
     @Override
