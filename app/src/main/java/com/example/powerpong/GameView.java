@@ -10,14 +10,18 @@ import android.view.MotionEvent;
 import android.view.SurfaceView;
 import android.view.SurfaceHolder;
 
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.FirebaseDatabase;
+
 public class GameView extends SurfaceView implements SurfaceHolder.Callback {
 
     private MainThread thread;
 
     private PongGame pongGame;
 
+
     private MotionEvent event;
-    public GameView(Context context) {
+    public GameView(Context context, FirebaseUser user, FirebaseDatabase database) {
         super(context);
 
         //the callback allows us to catch different events when they are called
@@ -28,7 +32,8 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
 
         DisplayMetrics displayMetrics = new DisplayMetrics();
         ((Activity)context).getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
-        pongGame = new PongGame(displayMetrics.heightPixels, displayMetrics.widthPixels, context);
+        pongGame = new PongGame(context, displayMetrics.heightPixels, displayMetrics.widthPixels,
+        user, database);
     }
 
     @Override

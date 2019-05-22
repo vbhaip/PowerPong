@@ -12,6 +12,13 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.WindowManager;
 
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
 public class PongGame {
 
     private int mPaddleWidth;
@@ -46,12 +53,16 @@ public class PongGame {
     private int mUserScore;
     private int mOppScore;
 
+    private FirebaseUser mUser;
+    private DatabaseReference mRef;
+
     private boolean reset;
 
     private Paint paint;
 
 
-    public PongGame(int height, int width, Context context){
+    public PongGame(Context context, int height, int width,
+                    FirebaseUser user, FirebaseDatabase database){
 
         mScreenWidth = width;
         mScreenHeight = height;
@@ -90,6 +101,10 @@ public class PongGame {
         reset = true;
 
         mFill = false;
+
+        mUser = user;
+        mRef = database.getReference("users/" + user.getUid() + "/score");
+
 
         paint = new Paint();
         paint.setTextAlign(Paint.Align.CENTER);
@@ -154,12 +169,42 @@ public class PongGame {
             reset = true;
             mBallX = mScreenWidth / 2;
             mBallY = mScreenHeight / 2;
+            mRef.addListenerForSingleValueEvent(new ValueEventListener(){
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    // Get Post object and use the values to update the UI
+                    long score = (long)(dataSnapshot.getValue());
+
+                    mRef.setValue(score + 1);
+                    // ...
+                }
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+                    // Getting Post failed, log a message
+                    // ...
+                }
+            });
         }
         else if(mBallY + mBallRadius >= mScreenHeight){
             mOppScore++;
             reset = true;
             mBallX = mScreenWidth / 2;
             mBallY = mScreenHeight / 2;
+            mRef.addListenerForSingleValueEvent(new ValueEventListener(){
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    // Get Post object and use the values to update the UI
+                    long score = (long)(dataSnapshot.getValue());
+
+                    mRef.setValue(score - 1);
+                    // ...
+                }
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+                    // Getting Post failed, log a message
+                    // ...
+                }
+            });
         }
 
         if(mBallY + mBallRadius >= mUserPaddleY - mPaddleHeight/2 &&

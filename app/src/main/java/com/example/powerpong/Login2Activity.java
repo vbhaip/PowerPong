@@ -73,7 +73,7 @@ public class Login2Activity extends AppCompatActivity {
     private void login(){
         String email = mEmailView.getText().toString();
         String pass = mPasswordView.getText().toString();
-        mAuth.createUserWithEmailAndPassword(email, pass)
+        mAuth.signInWithEmailAndPassword(email, pass)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
