@@ -13,7 +13,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".OpponentSelectorActivity"></activity>
+        <activity android:name=".TwoPlayerActivity"></activity>
+        <activity android:name=".OpponentSelectorActivity" />
         <activity
             android:name=".Login2Activity"
             android:screenOrientation="portrait">

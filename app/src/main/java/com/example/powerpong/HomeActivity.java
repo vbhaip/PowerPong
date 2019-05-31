@@ -31,6 +31,7 @@ public class HomeActivity extends AppCompatActivity {
     private TextView mPointsView;
 
     private Button mSinglePlayerButton;
+    private Button mMultiPlayerButton;
     private Button mLogOutButton;
 
     @Override
@@ -50,6 +51,15 @@ public class HomeActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent i = new Intent(HomeActivity.this, SinglePlayerActivity.class);
+                startActivity(i);
+            }
+        });
+
+        mMultiPlayerButton = (Button)findViewById(R.id.multiplayer_button);
+        mMultiPlayerButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(HomeActivity.this, OpponentSelectorActivity.class);
                 startActivity(i);
             }
         });
