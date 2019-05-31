@@ -25,6 +25,8 @@ public class TwoPlayerActivity extends AppCompatActivity {
     private String mGameCode;
     private String mOpp;
 
+    private boolean mIsPlayer1;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,6 +40,7 @@ public class TwoPlayerActivity extends AppCompatActivity {
         mRef = mDatabase.getReference("users/" + mUser.getUid());
 
         mOpp = "";
+        mGameCode = "";
         mRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -58,9 +61,21 @@ public class TwoPlayerActivity extends AppCompatActivity {
                 for(DataSnapshot child: dataSnapshot.getChildren()) {
                     if (child.getKey().equals(mUser.getUid() + mOpp)){
                         mGameCode = mUser.getUid() + mOpp;
+                        if(child.getValue().equals(mUser.getUid())){
+                            mIsPlayer1 = true;
+                        }
+                        else{
+                            mIsPlayer1 = false;
+                        }
                     }
                     else if(child.getKey().equals(mOpp + mUser.getUid())){
                         mGameCode = mOpp + mUser.getUid();
+                        if(child.getValue().equals(mUser.getUid())){
+                            mIsPlayer1 = true;
+                        }
+                        else{
+                            mIsPlayer1 = false;
+                        }
                     }
                 }
             }
