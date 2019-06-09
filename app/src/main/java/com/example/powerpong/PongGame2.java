@@ -84,7 +84,7 @@ public class PongGame2 {
     public PongGame2(Context context, int height, int width,
                     FirebaseUser user, final FirebaseDatabase database){
 
-        Log.d("tribe", "i think i made it");
+//        Log.d("tribe", "i think i made it");
         mScreenWidth = width;
         mScreenHeight = height;
 
@@ -153,7 +153,7 @@ public class PongGame2 {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         if(dataSnapshot.getKey().equals("player1")) {
-                            Log.d("the value bro", dataSnapshot.getValue(String.class));
+//                            Log.d("the value bro", dataSnapshot.getValue(String.class));
                             if (isPlayerOne == null && dataSnapshot.getValue(String.class).equals(mUser.getUid())) {
                                 isPlayerOne = true;
                             } else if (isPlayerOne == null) {
@@ -176,7 +176,7 @@ public class PongGame2 {
 //                            }
 
                                     if(child.getKey().equals("bx")) {
-                                        Log.d("just checking my friend", (Double.parseDouble((String)(child.getValue(String.class)))/ 100.0) + "");
+//                                        Log.d("just checking my friend", (Double.parseDouble((String)(child.getValue(String.class)))/ 100.0) + "");
                                         if(isPlayerOne){
                                             mBallX = (int)(mScreenWidth * (Double.parseDouble((String)(child.getValue(String.class)))/ 100.0));
 
@@ -184,7 +184,7 @@ public class PongGame2 {
                                         else {
                                             mBallX = (int)(mScreenWidth - mScreenWidth *(Double.parseDouble((String)(child.getValue(String.class)))/ 100.0));
                                         }
-                                        Log.d("checking again...", mBallX + "");
+//                                        Log.d("checking again...", mBallX + "");
                                     }
                                     else if(child.getKey().equals("by")) {
                                         if(isPlayerOne) {
@@ -193,7 +193,8 @@ public class PongGame2 {
                                         else{
                                             mBallY = (int)(mScreenHeight - (2 * mScreenHeight - 2 * mScreenHeight *  (Double.parseDouble((String)(child.getValue(String.class)))/ 100.0)));
                                         }
-                                        mBallY = 0;
+                                        Log.d("gimme info", mBallY + "");
+//                                        mBallY = 0;
 
                                     }
 
@@ -304,7 +305,9 @@ public class PongGame2 {
     }
 
     public void setBx(int bx){
-        bXRef.setValue(bx + "");
+//        if(isPlayerOne) {
+            bXRef.setValue(bx + "");
+//        }
 //        if(isPlayerOne){
 //            mBallX = mScreenWidth * ((int) (bx / 100.0));
 //        }
@@ -314,7 +317,9 @@ public class PongGame2 {
     }
 
     public void setBy(int by){
-        bYRef.setValue(by + "");
+//        if(isPlayerOne) {
+            bYRef.setValue(by + "");
+//        }
 //        if(isPlayerOne){
 //            mBallY = mScreenHeight - 2 * mScreenHeight * ((int) (by / 100.0));
 //        }
@@ -364,6 +369,7 @@ public class PongGame2 {
         if(ballOnMySide() && mBallY + mBallRadius >= mScreenHeight){
             mUserScore++;
             reset = true;
+
             setBx(50);
             setBy(25);
 
@@ -414,11 +420,42 @@ public class PongGame2 {
 //                mBallX < mOppPaddleX + mPaddleWidth/2 && mBallX > mOppPaddleX - mPaddleWidth/2){
 //            mBallVY *= -1;
 //        }
-        if(mBallX - mBallRadius + 1 <= 0){
+        if(mBallX - mBallRadius <= 0){
+            mBallX -= mBallVX;
+            mBallY -= mBallVY;
+
+            if(isPlayerOne) {
+                setBx((int) (100 * ((double) mBallX / mScreenWidth)));
+                setBy((int) (100 * (double)(mScreenHeight - mBallY)/(2*mScreenHeight)));
+//
+//            if(isPlayerOne) {
+//                mBallY = (int)(mScreenHeight - 2 * mScreenHeight * (Double.parseDouble((String)(child.getValue(String.class)))/ 100.0));
+//            }
+//            else{
+//                mBallY = (int)(mScreenHeight - (2 * mScreenHeight - 2 * mScreenHeight *  (Double.parseDouble((String)(child.getValue(String.class)))/ 100.0)));
+//            }
+            }
             setVx(-1*vXDir);
+
+//            setBx((int)((double)(mBallRadius + 2) /mScreenWidth));
         }
-        if(mBallX + mBallRadius + 1 >= mScreenWidth){
+        if(mBallX + mBallRadius >= mScreenWidth){
+            mBallX -= mBallVX;
+            mBallY -= mBallVY;
+
+            if(isPlayerOne) {
+                setBx((int) (100 * ((double) mBallX / mScreenWidth)));
+                setBy((int) (100 * (double)(mScreenHeight - mBallY)/(2*mScreenHeight)));
+//
+//            if(isPlayerOne) {
+//                mBallY = (int)(mScreenHeight - 2 * mScreenHeight * (Double.parseDouble((String)(child.getValue(String.class)))/ 100.0));
+//            }
+//            else{
+//                mBallY = (int)(mScreenHeight - (2 * mScreenHeight - 2 * mScreenHeight *  (Double.parseDouble((String)(child.getValue(String.class)))/ 100.0)));
+//            }
+            }
             setVx(-1*vXDir);
+//            setBx((int)((double)(mScreenWidth - mBallRadius - 2) /mScreenWidth));
         }
 
 
@@ -435,8 +472,17 @@ public class PongGame2 {
         mBallX += mBallVX;
         mBallY += mBallVY;
 
-//        setBx(m)
-
+        if(isPlayerOne) {
+            setBx((int) (100 * ((double) mBallX / mScreenWidth)));
+            setBy((int) (100 * (double)(mScreenHeight - mBallY)/(2*mScreenHeight)));
+//
+//            if(isPlayerOne) {
+//                mBallY = (int)(mScreenHeight - 2 * mScreenHeight * (Double.parseDouble((String)(child.getValue(String.class)))/ 100.0));
+//            }
+//            else{
+//                mBallY = (int)(mScreenHeight - (2 * mScreenHeight - 2 * mScreenHeight *  (Double.parseDouble((String)(child.getValue(String.class)))/ 100.0)));
+//            }
+        }
 //        mBallY = 0;
         Log.d("xloc", mBallX + "");
         Log.d("yloc", mBallY + "");
@@ -449,7 +495,7 @@ public class PongGame2 {
 
     public void displayScore(Canvas canvas){
 //        if(reset) {
-        Log.d("tribe", "girl i can't explain it");
+//        Log.d("tribe", "girl i can't explain it");
         paint.setColor(Color.parseColor("#EAEAEA"));
         paint.setTextSize(90);
 
@@ -464,14 +510,14 @@ public class PongGame2 {
     }
 
     public void draw(Canvas canvas){
-        Log.d("tribe", "I think i made it cuz i'm always smiling");
+//        Log.d("tribe", "I think i made it cuz i'm always smiling");
         canvas.drawColor(Color.parseColor("#031927"));
         displayScore(canvas);
         drawBall(canvas);
         drawPaddles(canvas);
         drawControls(canvas);
 
-        Log.d("imma", isPlayerOne + "");
+//        Log.d("imma", isPlayerOne + "");
     }
 
 
