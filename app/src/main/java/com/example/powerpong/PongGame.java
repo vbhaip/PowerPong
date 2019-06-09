@@ -83,17 +83,17 @@ public class PongGame {
         mLeftControlX = (int)(mScreenWidth*0.1);
         mRightControlX = (int)(mScreenWidth*0.9);
 
-        mControlRadius = 75;
+        mControlRadius = (int)(mScreenWidth*0.08);
 
-        mBallVX = 4;
-        mBallVY = 4;
+        mBallVX = (int)(mScreenWidth*0.004);
+        mBallVY = (int)(mScreenWidth*0.004);
 
-        mBallRadius = 25;
+        mBallRadius = (int)(mScreenWidth*0.02);
 
         mPaddleWidth = (int)(mScreenWidth*.2);
         mPaddleHeight = (int)(mScreenHeight*.05);
 
-        mPaddleVelocity = 4;
+        mPaddleVelocity = mBallVX;
 
         mUserScore = 0;
         mOppScore = 0;

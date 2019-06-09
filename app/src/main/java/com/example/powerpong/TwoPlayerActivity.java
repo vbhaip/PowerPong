@@ -1,8 +1,13 @@
 package com.example.powerpong;
 
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
+import android.util.Log;
+import android.view.Window;
+import android.view.WindowManager;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -30,7 +35,7 @@ public class TwoPlayerActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_two_player);
+
 
         mAuth = FirebaseAuth.getInstance();
         mUser = mAuth.getCurrentUser();
@@ -41,10 +46,15 @@ public class TwoPlayerActivity extends AppCompatActivity {
 
         mOpp = "";
         mGameCode = "";
+
         mRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                mOpp = (String)(dataSnapshot.getValue());
+                for(DataSnapshot child: dataSnapshot.getChildren()) {
+                    if(child.getKey() == "opp") {
+                        mOpp = (String) (child.getValue());
+                    }
+                }
             }
 
             @Override
@@ -86,5 +96,19 @@ public class TwoPlayerActivity extends AppCompatActivity {
             }
         });
 
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        this.requestWindowFeature(Window.FEATURE_NO_TITLE);
+
+        if(mUser == null){
+            Intent i = new Intent(this, Login2Activity.class);
+            startActivity(i);
+        }
+//        setContentView(R.layout.activity_single_player);
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+
+        Log.d("tribe", "and you are the reason now");
+        setContentView(new GameView2(this, mUser, mDatabase));
     }
 }

@@ -59,19 +59,13 @@ public class OpponentSelectorActivity extends AppCompatActivity {
                 Log.d("yall", dataSnapshot.toString());
                 for(DataSnapshot child : dataSnapshot.getChildren()){
                     Log.d("llay", child.toString());
-                    try {
-                        Thread.sleep(500);
-                    }
-                    catch (InterruptedException e){
-                        Log.d("error", e.toString());
-                    }
                     if(child.getValue().equals("public") && !mUser.getUid().equals(child.getKey())
                     && !mGameCodePresent){
                         Log.d("hii", "im here");
-//                        mDatabase.getReference("users/" + mUser.getUid() + "/opp")
-//                                .setValue(child.getKey());
-//                        mDatabase.getReference("users/" + child.getKey() + "/opp")
-//                                .setValue(mUser.getUid());
+                        mDatabase.getReference("users/" + mUser.getUid() + "/opp")
+                                .setValue(child.getKey());
+                        mDatabase.getReference("users/" + child.getKey() + "/opp")
+                                .setValue(mUser.getUid());
                         String gameCode = mUser.getUid() + child.getKey();
 
                         mDatabase.getReference("users/" + mUser.getUid() + "/gamecode")
@@ -93,6 +87,12 @@ public class OpponentSelectorActivity extends AppCompatActivity {
                         deleteJaunt("looking/"
                                 + child.getKey());
 
+                        try {
+                            Thread.sleep(500);
+                        }
+                        catch (InterruptedException e){
+                            Log.d("error", e.toString());
+                        }
                         Intent i = new Intent(OpponentSelectorActivity.this,
                                 TwoPlayerActivity.class);
 
@@ -110,8 +110,17 @@ public class OpponentSelectorActivity extends AppCompatActivity {
 
         });
 
+        try {
+            Thread.sleep(500);
+        }
+        catch (InterruptedException e){
+            Log.d("error", e.toString());
+        }
+
+
         DatabaseReference ref2 = mDatabase.getReference("users/" + mUser.getUid() + "/gamecode");
         ref2.addValueEventListener(new ValueEventListener() {
+
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 mGameCodePresent = true;
@@ -131,6 +140,9 @@ public class OpponentSelectorActivity extends AppCompatActivity {
         });
 
 
+
+
+
     }
 
     @Override
@@ -142,7 +154,9 @@ public class OpponentSelectorActivity extends AppCompatActivity {
 
         mMap = new HashMap<String, String>();
         mMap.put("bx", "50");
-        mMap.put("by", "50");
+        mMap.put("by", "25");
+        mMap.put("vx", "1");
+        mMap.put("vy", "1");
 
         mAuth = FirebaseAuth.getInstance();
 

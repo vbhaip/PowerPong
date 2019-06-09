@@ -111,6 +111,9 @@ public class Login2Activity extends AppCompatActivity {
                             DatabaseReference ref = mDatabase.getReference("users/" + mAuth.getUid() + "/score");
                             ref.setValue(0);
 
+                            ref = mDatabase.getReference("users/" + mAuth.getUid() + "/name");
+                            ref.setValue(user.getEmail());
+
                             updateUI(user);
                         } else {
                             // If sign in fails, display a message to the user.
