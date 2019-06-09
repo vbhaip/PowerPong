@@ -91,8 +91,8 @@ public class PongGame2 {
         vXDir = 1;
         vYDir = 1;
 
-//        Log.d("height", "" + mScreenHeight);
-//        Log.d("width","" + mScreenWidth);
+        Log.d("height", "" + mScreenHeight);
+        Log.d("width","" + mScreenWidth);
 
         mUserPaddleY = (int)(mScreenHeight *.95);
 //        mOppPaddleY = (int)(mScreenHeight *.05);
@@ -146,60 +146,84 @@ public class PongGame2 {
                 vYRef = database.getReference("games/" + mGameCode + "/vy");
 
 
-                DatabaseReference mGameRef = database.getReference("games/" + mGameCode);
+                final DatabaseReference mGameRef = database.getReference("games/" + mGameCode);
 
-                mGameRef.addValueEventListener(new ValueEventListener() {
+                DatabaseReference temp2 = database.getReference("games/" + mGameCode + "/player1");
+                temp2.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        for(DataSnapshot child : dataSnapshot.getChildren()) {
-
-                            //this finds whether we're player one
-                            if(isPlayerOne == null && child.getValue().equals(mUser.getUid())){
+                        if(dataSnapshot.getKey().equals("player1")) {
+                            Log.d("the value bro", dataSnapshot.getValue(String.class));
+                            if (isPlayerOne == null && dataSnapshot.getValue(String.class).equals(mUser.getUid())) {
                                 isPlayerOne = true;
-                            }
-                            else if(isPlayerOne == null){
+                            } else if (isPlayerOne == null) {
                                 isPlayerOne = false;
                             }
-
-
-                            if(child.getKey().equals("bx")) {
-                                if(isPlayerOne){
-                                    mBallX = mScreenWidth * (int) (Integer.parseInt((String)(child.getValue(String.class)))/ 100.0);
-                                }
-                                else {
-                                    mBallX = mScreenWidth - mScreenWidth * (int) (Integer.parseInt((String)(child.getValue(String.class)))/ 100.0);
-                                }
-                            }
-                            else if(child.getKey().equals("by")) {
-                                if(isPlayerOne) {
-                                    mBallY = mScreenHeight - 2 * mScreenHeight * (int) (Integer.parseInt((String)(child.getValue(String.class)))/ 100.0);
-                                }
-                                else{
-                                    mBallY = mScreenHeight - (2 * mScreenHeight - 2 * mScreenHeight * (int) (Integer.parseInt((String)(child.getValue(String.class)))/ 100.0));
-                                }
-                                mBallY = 0;
-
-                            }
-
-                            if(isPlayerOne && child.getKey().equals("vx")){
-                                vXDir = (Integer.parseInt((String)(child.getValue(String.class))));
-                                mBallVX = VELOCITY * vXDir;
-                            }
-                            else if(child.getKey().equals("vx")){
-                                vXDir = (Integer.parseInt((String)(child.getValue(String.class))));
-                                mBallVX = -1 * VELOCITY * vXDir;
-                            }
-
-                            if(isPlayerOne && child.getKey().equals("vy")){
-                                vYDir = (Integer.parseInt((String)(child.getValue(String.class))));
-                                mBallVY = VELOCITY * vYDir;
-                            }
-                            else if(child.getKey().equals("vy")){
-                                vYDir =  (Integer.parseInt((String)(child.getValue(String.class))));
-                                mBallVY = -1 * VELOCITY * vYDir;
-                            }
-
                         }
+                        mGameRef.addValueEventListener(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                for(DataSnapshot child : dataSnapshot.getChildren()) {
+
+//                            //this finds whether we're player one
+//                            if(child.getKey().equals("player1")) {
+//                                Log.d("the value bro", child.getValue(String.class));
+//                                if (isPlayerOne == null && child.getValue(String.class).equals(mUser.getUid())) {
+//                                    isPlayerOne = true;
+//                                } else if (isPlayerOne == null) {
+//                                    isPlayerOne = false;
+//                                }
+//                            }
+
+                                    if(child.getKey().equals("bx")) {
+                                        Log.d("just checking my friend", (Double.parseDouble((String)(child.getValue(String.class)))/ 100.0) + "");
+                                        if(isPlayerOne){
+                                            mBallX = (int)(mScreenWidth * (Double.parseDouble((String)(child.getValue(String.class)))/ 100.0));
+
+                                        }
+                                        else {
+                                            mBallX = (int)(mScreenWidth - mScreenWidth *(Double.parseDouble((String)(child.getValue(String.class)))/ 100.0));
+                                        }
+                                        Log.d("checking again...", mBallX + "");
+                                    }
+                                    else if(child.getKey().equals("by")) {
+                                        if(isPlayerOne) {
+                                            mBallY = (int)(mScreenHeight - 2 * mScreenHeight * (Double.parseDouble((String)(child.getValue(String.class)))/ 100.0));
+                                        }
+                                        else{
+                                            mBallY = (int)(mScreenHeight - (2 * mScreenHeight - 2 * mScreenHeight *  (Double.parseDouble((String)(child.getValue(String.class)))/ 100.0)));
+                                        }
+                                        mBallY = 0;
+
+                                    }
+
+                                    if(isPlayerOne && child.getKey().equals("vx")){
+                                        vXDir = (Integer.parseInt((String)(child.getValue(String.class))));
+                                        mBallVX = VELOCITY * vXDir;
+                                    }
+                                    else if(child.getKey().equals("vx")){
+                                        vXDir = (Integer.parseInt((String)(child.getValue(String.class))));
+                                        mBallVX = -1 * VELOCITY * vXDir;
+                                    }
+
+                                    if(isPlayerOne && child.getKey().equals("vy")){
+                                        vYDir = (Integer.parseInt((String)(child.getValue(String.class))));
+                                        mBallVY = VELOCITY * vYDir;
+                                    }
+                                    else if(child.getKey().equals("vy")){
+                                        vYDir =  (Integer.parseInt((String)(child.getValue(String.class))));
+                                        mBallVY = -1 * VELOCITY * vYDir;
+                                    }
+
+                                }
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                            }
+                        });
+
                     }
 
                     @Override
@@ -207,6 +231,8 @@ public class PongGame2 {
 
                     }
                 });
+
+
             }
 
             @Override
@@ -279,47 +305,47 @@ public class PongGame2 {
 
     public void setBx(int bx){
         bXRef.setValue(bx + "");
-        if(isPlayerOne){
-            mBallX = mScreenWidth * ((int) (bx / 100.0));
-        }
-        else {
-            mBallX = mScreenWidth - mScreenWidth * ((int) (bx / 100.0));
-        }
+//        if(isPlayerOne){
+//            mBallX = mScreenWidth * ((int) (bx / 100.0));
+//        }
+//        else {
+//            mBallX = mScreenWidth - mScreenWidth * ((int) (bx / 100.0));
+//        }
     }
 
     public void setBy(int by){
         bYRef.setValue(by + "");
-        if(isPlayerOne){
-            mBallY = mScreenHeight - 2 * mScreenHeight * ((int) (by / 100.0));
-        }
-        else{
-            mBallY = mScreenHeight - (2 * mScreenHeight - 2 * mScreenHeight * ((int) (by / 100.0)));
-        }
-        mBallY = 0;
+//        if(isPlayerOne){
+//            mBallY = mScreenHeight - 2 * mScreenHeight * ((int) (by / 100.0));
+//        }
+//        else{
+//            mBallY = mScreenHeight - (2 * mScreenHeight - 2 * mScreenHeight * ((int) (by / 100.0)));
+//        }
+//        mBallY = 0;
     }
 
     public void setVx(int vx){
         if(isPlayerOne) {
             vXRef.setValue(vx + "");
         }
-        vXDir = (int)(vx);
-        if(isPlayerOne){
-            mBallVX = VELOCITY * vx;
-        }
-        else{
-            mBallVX = -1 * VELOCITY * vx;
-        }
+//        vXDir = (int)(vx);
+//        if(isPlayerOne){
+//            mBallVX = VELOCITY * vx;
+//        }
+//        else{
+//            mBallVX = -1 * VELOCITY * vx;
+//        }
     }
 
     public void setVy(int vy){
         vYRef.setValue(vy + "");
-        vYDir = (int)(vy);
-        if(isPlayerOne){
-            mBallVY = VELOCITY * vy;
-        }
-        else{
-            mBallVY = -1 * VELOCITY * vy;
-        }
+//        vYDir = (int)(vy);
+//        if(isPlayerOne){
+//            mBallVY = VELOCITY * vy;
+//        }
+//        else{
+//            mBallVY = -1 * VELOCITY * vy;
+//        }
     }
 
 
@@ -388,10 +414,10 @@ public class PongGame2 {
 //                mBallX < mOppPaddleX + mPaddleWidth/2 && mBallX > mOppPaddleX - mPaddleWidth/2){
 //            mBallVY *= -1;
 //        }
-        if(mBallX - mBallRadius <= 0){
+        if(mBallX - mBallRadius + 1 <= 0){
             setVx(-1*vXDir);
         }
-        if(mBallX + mBallRadius >= mScreenWidth){
+        if(mBallX + mBallRadius + 1 >= mScreenWidth){
             setVx(-1*vXDir);
         }
 
@@ -409,7 +435,9 @@ public class PongGame2 {
         mBallX += mBallVX;
         mBallY += mBallVY;
 
-        mBallY = 0;
+//        setBx(m)
+
+//        mBallY = 0;
         Log.d("xloc", mBallX + "");
         Log.d("yloc", mBallY + "");
 
