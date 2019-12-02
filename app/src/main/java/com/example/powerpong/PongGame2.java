@@ -412,7 +412,7 @@ public class PongGame2 {
 //            });
 //        }
 
-        if(mBallY + mBallRadius >= mUserPaddleY - mPaddleHeight/2 &&
+        if(ballOnMySide() && mBallY + mBallRadius >= mUserPaddleY - mPaddleHeight/2 &&
                 mBallX < mUserPaddleX + mPaddleWidth/2 && mBallX > mUserPaddleX - mPaddleWidth/2){
             setVy(-1*vYDir);
         }
@@ -421,8 +421,8 @@ public class PongGame2 {
 //            mBallVY *= -1;
 //        }
         if(mBallX - mBallRadius <= 0){
-            mBallX -= mBallVX;
-            mBallY -= mBallVY;
+            mBallX -= 10 * mBallVX;
+            mBallY += 10 * mBallVY;
 
             if(isPlayerOne) {
                 setBx((int) (100 * ((double) mBallX / mScreenWidth)));
@@ -440,8 +440,8 @@ public class PongGame2 {
 //            setBx((int)((double)(mBallRadius + 2) /mScreenWidth));
         }
         if(mBallX + mBallRadius >= mScreenWidth){
-            mBallX -= mBallVX;
-            mBallY -= mBallVY;
+            mBallX -= 10 * mBallVX;
+            mBallY += 10 * mBallVY;
 
             if(isPlayerOne) {
                 setBx((int) (100 * ((double) mBallX / mScreenWidth)));
